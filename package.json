@@ -1,0 +1,33 @@
+{
+  "name": "real-time-web-2223",
+  "version": "1.0.0",
+  "description": "RTW Minor Web",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neinno/real-time-web-2223.git"
+  },
+  "keywords": [
+    "RTW",
+    "Chat"
+  ],
+  "author": "Nigel Fijnheer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Neinno/real-time-web-2223/issues"
+  },
+  "homepage": "https://github.com/Neinno/real-time-web-2223#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
