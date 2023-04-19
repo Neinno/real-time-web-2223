@@ -35,9 +35,9 @@ io.on('connection', (socket) => {
 })
 
 io.on('connection', (socket) => {
-    socket.on('send-nickname', (nickname) => {
+    socket.on('nickname', (nickname) => {
         socket.nickname = nickname;
-        io.emit("send-nickname", socket.nickname);
+        io.emit("nickname", socket.nickname);
     });
 });
 

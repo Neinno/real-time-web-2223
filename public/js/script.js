@@ -26,7 +26,7 @@ function username() {
     if (nickname == null || nickname == "") {
         text = "User cancelled the prompt.";
     } else {
-        socket.emit('send-nickname', nickname);
+        socket.emit('nickname', nickname);
     }
 }
 
