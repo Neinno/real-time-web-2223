@@ -40,7 +40,7 @@ section {
 
 /* CONTENT STYLING */
 .content {
-    width: clamp(25vw 100% 100%);
+    width: clamp(20vw 100% 100%);
     aspect-ratio: 1/1;
 }
 

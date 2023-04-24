@@ -4,11 +4,16 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const path = require('path')
 const port = process.env.PORT || 3000
+const fetch = require('node-fetch');
 
 
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+http.listen(port, () => {
+  console.log('listening on http://localhost:' + port)
+})
 
 const historySize = 50
 let history = []
@@ -41,8 +46,15 @@ io.on('connection', (socket) => {
     });
 });
 
-http.listen(port, () => {
-  console.log('listening on http://localhost:' + port)
-})
+
+fetch("https://restcountries.com/v3.1/all?fields=name,flags")
+  .then(async response => {
+    const data = await response.json();
+    console.log(data)
+  })
+  .catch(error => {
+    console.error(error);
+    res.status(500).send('Error fetching');
+});
 
 
