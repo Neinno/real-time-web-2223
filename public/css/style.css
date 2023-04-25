@@ -40,10 +40,15 @@ section {
 
 /* CONTENT STYLING */
 .content {
-    width: clamp(20vw 100% 100%);
     aspect-ratio: 1/1;
+    display: grid;
+    place-content: center;
 }
 
+img {
+    width: 100%;
+    padding: 2em;
+}
 
 /* CHAT STYLING */
 .chat {

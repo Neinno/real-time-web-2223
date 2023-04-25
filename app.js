@@ -47,14 +47,5 @@ io.on('connection', (socket) => {
 });
 
 
-fetch("https://restcountries.com/v3.1/all?fields=name,flags")
-  .then(async response => {
-    const data = await response.json();
-    console.log(data)
-  })
-  .catch(error => {
-    console.error(error);
-    res.status(500).send('Error fetching');
-});
 
 
