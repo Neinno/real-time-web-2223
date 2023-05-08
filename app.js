@@ -26,57 +26,47 @@ let history = []
 app.use(express.static(path.resolve('public')))
 
 io.on('connection', (socket) => {
-  console.log('a user connected')
-  io.emit('history', history)
-
-  socket.on('message', (message) => {
-    while (history.length > historySize) {
-      history.shift()
-    }
-    history.push(message)
-
-    io.emit('message', socket.nickname + ": " + message);
-  })
-
+  console.log('a user connected');
+  socket.emit('current country', currentCountry);
   socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
-})
-
-io.on('connection', (socket) => {
-    socket.on('nickname', (nickname) => {
-        socket.nickname = nickname;
-        io.emit("nickname", socket.nickname);
+    console.log('user disconnected');
+  });
+  socket.on('get new country', () => {
+    getCountry().then((data) => {
+      currentCountry = data;
+      io.emit('new country', currentCountry);
     });
+  });
 });
 
-async function getRandomCountry() {
-  try {
-    const response = await fetch(`https://restcountries.com/v3.1/all?fields=name,flags`);
-    const data = await response.json();
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const countryName = data[randomIndex].name.common;
-    const countryFlag = data[randomIndex].flags.svg;
-    
-    return { countryName, countryFlag };
+let currentCountry = null;
 
-  } catch (error) {
-    console.error(error);
-    throw new Error('Error fetching');
-  }
-}
+const getCountry = async () => {
+  return fetchJson(`https://restcountries.com/v3.1/all?fields=name,flags`)
+    .then((data) => {
+      const randomIndex = Math.floor(Math.random() * data.length);
+      return data[randomIndex];
+    });
+};
 
-app.get('/', async (req, res) => {
-  try {
-    const { countryName, countryFlag } = await getRandomCountry();
-    res.render('home', { countryName, countryFlag });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching data');
-  }
+const fetchJson = async (url) => {
+  return await fetch(url)
+    .then((response) => response.json())
+    .then((body) => {
+      const countries = body.map(({ name, flags }) => ({ name: name.common, flag: flags.svg }));
+      return countries;
+    })
+    .catch((error) => error);
+};
+
+app.get('/', (req, res) => {
+  getCountry().then((data) => {
+    currentCountry = data;
+    res.render('home', {
+      name: data.name,
+      flag: data.flag,
+    });
+    io.emit('new country', currentCountry);
+  });
 });
-
-
-
-
 
