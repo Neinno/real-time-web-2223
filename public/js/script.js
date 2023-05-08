@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let messages = document.querySelector('section ul')
   let input = document.querySelector('input')
+  let flag = document.getElementById('country-flag');
 
   document.querySelector('form').addEventListener('submit', (event) => {
     event.preventDefault()
@@ -38,9 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
     messages.appendChild(Object.assign(document.createElement('li'), { textContent: message }))
     messages.scrollTop = messages.scrollHeight
   }
-
+  
   socket.on('current country', (data) => {
-    document.getElementById('country-flag').setAttribute('src', data.flag);
+    flag.setAttribute('src', data.flag);
   });
 
+  socket.on('correct guess', (data) => {
+    socket.emit('get current country');
+  });
 });

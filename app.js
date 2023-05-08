@@ -25,30 +25,6 @@ let history = []
 // Serveer client-side bestanden
 app.use(express.static(path.resolve('public')))
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.emit('current country', currentCountry);
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-  socket.on('get new country', () => {
-    getCountry().then((data) => {
-      currentCountry = data;
-      io.emit('new country', currentCountry);
-    });
-  });
-});
-
-let currentCountry = null;
-
-const getCountry = async () => {
-  return fetchJson(`https://restcountries.com/v3.1/all?fields=name,flags`)
-    .then((data) => {
-      const randomIndex = Math.floor(Math.random() * data.length);
-      return data[randomIndex];
-    });
-};
-
 const fetchJson = async (url) => {
   return await fetch(url)
     .then((response) => response.json())
@@ -59,14 +35,57 @@ const fetchJson = async (url) => {
     .catch((error) => error);
 };
 
-app.get('/', (req, res) => {
-  getCountry().then((data) => {
-    currentCountry = data;
-    res.render('home', {
-      name: data.name,
-      flag: data.flag,
-    });
-    io.emit('new country', currentCountry);
+let currentCountry = null;
+
+const generateCountry = async () => {
+  const countries = await fetchJson(`https://restcountries.com/v3.1/all?fields=name,flags`);
+  const randomIndex = Math.floor(Math.random() * countries.length);
+  currentCountry = countries[randomIndex];
+  console.log(`Generated country: ${currentCountry.name}`);
+};
+
+generateCountry();
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  // send current country to newly connected client
+  socket.emit('current country', currentCountry);
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on('message', (message) => {
+    while (history.length > historySize) {
+      history.shift();
+    }
+    history.push(message);
+
+    io.emit('message', socket.nickname + ': ' + message);
+
+    // check if message matches current country
+    if (message.toLowerCase() === currentCountry.name.toLowerCase()) {
+      generateCountry().then(() => {
+        io.emit('current country', currentCountry);
+        io.emit('message', `Flag has been guessed correctly, new flag`);
+      });
+    }
+  });
+
+  socket.on('nickname', (nickname) => {
+    socket.nickname = nickname;
+    io.emit('nickname', socket.nickname);
   });
 });
+
+app.get('/', (req, res) => {
+  res.render('home', {
+    name: currentCountry.name,
+    flag: currentCountry.flag,
+  });
+});
+
+
+
 
