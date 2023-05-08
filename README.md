@@ -2,6 +2,7 @@
 
 ## Table of Contents
 - [Introductie](#Introductie)
+- [Proces](#Proces)
 
 
 ### Live site
