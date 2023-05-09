@@ -4,21 +4,36 @@ document.addEventListener('DOMContentLoaded', () => {
   let messages = document.querySelector('section ul')
   let input = document.querySelector('input')
   let flag = document.getElementById('country-flag');
+  let messageHistory = [];
 
   document.querySelector('form').addEventListener('submit', (event) => {
     event.preventDefault()
     if (input.value) {
-      socket.emit('message', input.value)
-      input.value = ''
+      if (socket.connected) {
+        socket.emit('message', input.value)
+        input.value = ''
+      } else {
+        messageHistory.push({username: socket.nickname, message: input.value});
+        showOfflinePage();
+      }
     }
   })
 
+  socket.on('connect', () => {
+    socket.sendBuffer.forEach((data) => {
+      socket.volatile.emit(data[0], ...data.slice(1));
+    });
+    socket.sendBuffer = [];
+  });
+
   socket.on('message', (message) => {
     addMessage(message)
+    messageHistory.push({username: message.username, message: message.message});
   })
 
   socket.on('history', (history) => {
-    history.forEach((message) => {
+    messageHistory = history;
+    messageHistory.forEach((message) => {
       addMessage(message)
     })
   })
@@ -36,8 +51,21 @@ document.addEventListener('DOMContentLoaded', () => {
   username();
 
   function addMessage(message) {
-    messages.appendChild(Object.assign(document.createElement('li'), { textContent: message }))
-    messages.scrollTop = messages.scrollHeight
+    const li = document.createElement('li');
+    li.classList.add(message.username === 'Game' ? 'game-message' : 'user-message');
+  
+    const usernameDiv = document.createElement('div');
+    usernameDiv.classList.add('message-username');
+    usernameDiv.textContent = message.username;
+    li.appendChild(usernameDiv);
+  
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message-text');
+    messageDiv.textContent = message.message;
+    li.appendChild(messageDiv);
+  
+    messages.appendChild(li);
+    messages.scrollTop = messages.scrollHeight;
   }
   
   socket.on('current country', (data) => {
@@ -45,6 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('correct guess', (data) => {
-    socket.emit('get current country');
+    if (socket.connected) {
+      socket.emit('get current country');
+    } else {
+      messageHistory.push({username: 'Game', message: `Flag has been guessed correctly`});
+      showOfflinePage();
+    }
   });
+
+  function showOfflinePage() {
+    console.log('offline')
+  }
 });

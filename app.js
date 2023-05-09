@@ -49,8 +49,9 @@ generateCountry();
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  // send current country to newly connected client
+  // send current country and history to newly connected client
   socket.emit('current country', currentCountry);
+  socket.emit('history', history);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
@@ -60,15 +61,17 @@ io.on('connection', (socket) => {
     while (history.length > historySize) {
       history.shift();
     }
-    history.push(message);
+    history.push({username: socket.nickname, message: message}); // include the username property
 
-    io.emit('message', socket.nickname + ': ' + message);
-
+    io.emit('message', {username: socket.nickname, message: message}); // include the username property
+    
     // check if message matches current country
     if (message.toLowerCase() === currentCountry.name.toLowerCase()) {
       generateCountry().then(() => {
         io.emit('current country', currentCountry);
-        io.emit('message', `Flag has been guessed correctly, new flag`);
+        const correctGuessMessage = {username: 'Game', message: `Flag has been guessed correctly`};
+        io.emit('message', correctGuessMessage);
+        history.push(correctGuessMessage); // include the message in the history array
       });
     }
   });
@@ -83,6 +86,7 @@ app.get('/', (req, res) => {
   res.render('home', {
     name: currentCountry.name,
     flag: currentCountry.flag,
+    history: history
   });
 });
 
