@@ -82,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function showOfflinePage() {
-    console.log('offline')
+    const li = document.createElement('li');
+    li.classList.add('offline-message');
+    li.textContent = 'You are currently offline. Please check your internet connection.';
+    messages.appendChild(li);
+    messages.scrollTop = messages.scrollHeight;
   }
 });
