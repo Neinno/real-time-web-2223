@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message-text');
     messageDiv.textContent = 'You are currently offline. Please check your internet connection.';
-    li.appendChild(systemnameDiv);
+    li.appendChild(messageDiv);
 
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
