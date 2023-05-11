@@ -84,7 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function showOfflinePage() {
     const li = document.createElement('li');
     li.classList.add('offline-message');
-    li.textContent = 'You are currently offline. Please check your internet connection.';
+
+    const systemnameDiv = document.createElement('div');
+    systemnameDiv.classList.add('message-username');
+    systemnameDiv.textContent = 'Server';
+    li.appendChild(systemnameDiv);
+  
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message-text');
+    messageDiv.textContent = 'You are currently offline. Please check your internet connection.';
+    li.appendChild(systemnameDiv);
+
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
   }
