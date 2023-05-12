@@ -99,6 +99,7 @@ form {
     border-radius: 0.5em 0.5em 0 0;
     font-style: italic;
     background-color: inherit;
+    overflow: hidden;
 }
 
 .user-message > .message-username {
@@ -145,6 +146,30 @@ form {
     transform: rotate(20deg);
     z-index: -1;
 }
+
+.offline-message {
+    background-color: #fa8787;
+    margin: 0 0 2em 0;
+}
+
+.offline-message > .message-username {
+    background-color: #b05f5f;
+}
+
+.offline-message::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 2em 1em 0 1em;
+    border-color: #fa8787 transparent transparent transparent;
+    position: absolute;
+    left: 1em;
+    bottom: -1.5em;
+    transform: rotate(20deg);
+    z-index: -1;
+}
+
 
 input[type="text"] {
     margin: 0 1em 0 0;
