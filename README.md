@@ -61,12 +61,12 @@ fetch(`https://restcountries.com/v3.1/all?fields=name,flags`);
 Dit geeft mij alleen de naam, en de bijbehorende vlag van het land terug. Dit is vervolgens wat ik terug krijg van de API:
 
 ### Data model van API
-<img src="/readmeimgs/datamodelAPI.png" width=400px>
+<img src="/readmeimgs/datamodelAPI.png" width=800px>
 
 Daarna heb ik een Data Flow Diagram gemaakt van hoe ik mijn applicatie wil gaan opzetten. Ik wil beginnen met het ophalen van de data uit de API. Dit moet dan gekoppeld worden aan de chat. Als de gebruiker op de applicatie komt krijgt hij een input waar hij zijn naam kan invullen. Daarna kan je beginnen met chatten, en je ziet een willekeurige vlag. Als het goede antwoord geraden is in de chat, zal de server een bericht geven dat de vlag goed geraden is, en een nieuwe vlag genereren. 
 
 ### Data Flow Diagram
-<img src="/readmeimgs/dataflowdiagram.png" width=400px>
+<img src="/readmeimgs/dataflowdiagram.png" width=800px>
 
 # Applicatie
 Om met mijn applicatie te beginnen heb ik een NodeJS applicatie opgezet. Daarna heb ik express toegevoegd samen met handlebars. De volgende dependencies die ik heb toegevoegd zijn NodeFetch en Socket.io.
