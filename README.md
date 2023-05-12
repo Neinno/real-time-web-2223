@@ -13,14 +13,14 @@ Voor Real-Time web ben ik met NodeJS en sockets bezig geweest om een chat te mak
 
 In deze opdracht ga ik een guesser game maken waarbij je de vlaggen van de wereld moet gaan raden. Doormiddel van het gebruik van Sockets kan ik een chat aanmaken, waar je dan vervolgens met meerdere mensen kan typen, en kan gaan raden welke vlag het is.
 
-## Proces
+# Proces
 
 ### Starten met sockets
 Voor deze opdracht ben ik eerst begonnen het met opzetten van een NodeJS applicatie. Hierbij heb ik express, en sockets geïnstalleerd. Voor het opzetten van sockets heb ik gekeken naar het voorbeeld van de website van socket.io.
 
 - https://socket.io/get-started/chat
 
-### API
+## API
 Mijn idee is om een willekeurige vlag van de wereld te laten zien, die de gebruikers vervolgens moeten gaan raden. Hierbij heb ik deze API gevonden:
 
 Rest countries API om de landen en hun vlaggen op te halen.
@@ -34,11 +34,13 @@ fetch(`https://restcountries.com/v3.1/all?fields=name,flags`);
 
 Dit geeft mij alleen de naam, en de bijbehorende vlag van het land terug. Dit is vervolgens wat ik terug krijg van de API:
 
-#### Data model van API
+### Data model van API
 <img src="/readmeimgs/datamodelAPI.png" height=400px>
 
-Daarna heb ik een Data Flow Diagram gemaakt van hoe ik mijn applicatie wil gaan opzetten. 
+Daarna heb ik een Data Flow Diagram gemaakt van hoe ik mijn applicatie wil gaan opzetten. Ik wil beginnen met het ophalen van de data uit de API. Dit moet dan gekoppeld worden aan de chat. Als de gebruiker op de applicatie komt krijgt hij een input waar hij zijn naam kan invullen. Daarna kan je beginnen met chatten, en je ziet een willekeurige vlag. Als het goede antwoord geraden is in de chat, zal de server een bericht geven dat de vlag goed geraden is, en een nieuwe vlag genereren. 
 
-#### Data Flow Diagram
+### Data Flow Diagram
 <img src="/readmeimgs/dataflowdiagram.png" height=400px>
+
+## Applicatie
 
