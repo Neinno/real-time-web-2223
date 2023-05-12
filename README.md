@@ -1,8 +1,11 @@
 # Real-Time Web @cmda-minor-web 2022 - 2023
 
+<img src="/readmeimgs/header.png" height=800px>
+
 ## Table of Contents
 - [Introductie](#Introductie)
-- [Proces](#Proces)
+- [Proces](#proces)
+- [Applicatie](#applicatie)
 
 
 ### Live site
