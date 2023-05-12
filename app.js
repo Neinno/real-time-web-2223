@@ -49,7 +49,6 @@ generateCountry();
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  // send current country and history to newly connected client
   socket.emit('current country', currentCountry);
   socket.emit('history', history);
 
@@ -61,9 +60,9 @@ io.on('connection', (socket) => {
     while (history.length > historySize) {
       history.shift();
     }
-    history.push({username: socket.nickname, message: message}); // include the username property
+    history.push({username: socket.nickname, message: message});
 
-    io.emit('message', {username: socket.nickname, message: message}); // include the username property
+    io.emit('message', {username: socket.nickname, message: message});
     
     // check if message matches current country
     if (message.toLowerCase() === currentCountry.name.toLowerCase()) {
@@ -71,7 +70,7 @@ io.on('connection', (socket) => {
         io.emit('current country', currentCountry);
         const correctGuessMessage = {username: 'Game', message: `Flag has been guessed correctly`};
         io.emit('message', correctGuessMessage);
-        history.push(correctGuessMessage); // include the message in the history array
+        history.push(correctGuessMessage);
       });
     }
   });
